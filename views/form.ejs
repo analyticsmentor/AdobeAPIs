@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Submit Details</title>
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <style>
+    .report-suite-group {
+      margin-bottom: 5px;
+    }
+    .report-suite-group input {
+      margin-right: 10px;
+    }
+    .add-btn {
+      background-color: #333;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 4px;
+      margin-top: 5px;
+    }
+    .add-btn:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Submit Details</h1>
+  <form action="/submit" method="post">
+    <label for="clientId">Client ID:</label>
+    <input type="text" id="clientId" name="clientId" required><br>
+    <label for="clientSecret">Client Secret:</label>
+    <input type="text" id="clientSecret" name="clientSecret" required><br>
+    
+    <label for="reportSuites">Report Suite(s):</label>
+    <div id="reportSuites">
+      <div class="report-suite-group">
+        <label>Report Suite 1:</label>
+        <input type="text" name="reportSuiteList[]" required>
+      </div>
+    </div>
+    <button type="button" class="add-btn" onclick="addReportSuite()">+</button>
+
+    <button type="submit">Download Vars/Events</button>
+  </form>
+
+  <script>
+    let reportSuiteCount = 1;
+
+    function addReportSuite() {
+      reportSuiteCount++;
+      const reportSuitesDiv = document.getElementById('reportSuites');
+      const newReportSuiteGroup = document.createElement('div');
+      newReportSuiteGroup.className = 'report-suite-group';
+      newReportSuiteGroup.innerHTML = `
+        <label>Report Suite ${reportSuiteCount}:</label>
+        <input type="text" name="reportSuiteList[]">
+      `;
+      reportSuitesDiv.appendChild(newReportSuiteGroup);
+    }
+  </script>
+</body>
+</html>
