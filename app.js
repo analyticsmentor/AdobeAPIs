@@ -14,7 +14,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-  res.render('form');
+  res.render('form', {
+    error: null,
+    clientIdError: null,
+    clientSecretError: null,
+    formData: { clientId: '', clientSecret: '', reportSuiteList: [''] }
+  });
 });
 
 app.post('/submit', (req, res) => {
@@ -28,10 +33,11 @@ app.post('/submit', (req, res) => {
   const makeRequest = (options) => new Promise((resolve, reject) => {
     request(options, (error, response, body) => {
       if (error) 
-            return reject(error);
-      if(response.statusCode>=400)
-            console.log(JSON.parse(response.body).error_description)
-
+        return reject(error);
+      if (response.statusCode >= 400) {
+        const errorMessage = JSON.parse(response.body).error_description || 'An error occurred';
+        return reject(new Error(errorMessage));
+      }
       resolve(response);
     });
   });
@@ -138,28 +144,43 @@ app.post('/submit', (req, res) => {
         };
       });
 
-      //workbooks.forEach(({ rsid, workbook }) => {
-      //  XLSX.writeFile(workbook, `AA Vars 4 ${rsid}.xlsx`);
-      //});
       // Function to get the Downloads directory path
-        function getDownloadsFolder() {
-            const homeDir = os.homedir();
-            return path.join(homeDir, 'Downloads');
-        }
-        
-        // Save each workbook to the Downloads folder
-        const downloadsFolder = getDownloadsFolder();
-        workbooks.forEach(({ rsid, workbook }) => {
-            const filePath = path.join(downloadsFolder, `AA Vars 4 ${rsid}.xlsx`);
-            XLSX.writeFile(workbook, filePath);
-            console.log(`Workbook saved to: ${filePath}`);
-        });
+      function getDownloadsFolder() {
+          const homeDir = os.homedir();
+          return path.join(homeDir, 'Downloads');
+      }
+      
+      // Save each workbook to the Downloads folder
+      const downloadsFolder = getDownloadsFolder();
+      workbooks.forEach(({ rsid, workbook }) => {
+          const filePath = path.join(downloadsFolder, `AA Vars 4 ${rsid}.xlsx`);
+          XLSX.writeFile(workbook, filePath);
+          console.log(`Workbook saved to: ${filePath}`);
+      });
 
       res.render('result', { workbooks: workbooks.map(wb => `AA Vars 4 ${wb.rsid}.xlsx`) });
     })
     .catch(error => {
-      console.error('Error:', error);
-      res.status(500).send('An error occurred');
+      console.error('Error:', error.message);
+
+      let errorMessage = error.message;
+      let clientIdError = null;
+      let clientSecretError = null;
+
+      if (errorMessage.includes('client_id')) {
+        clientIdError = errorMessage;
+      }
+
+      if (errorMessage.includes('client_secret')) {
+        clientSecretError = errorMessage;
+      }
+
+      res.render('form', {
+        error: errorMessage,
+        clientIdError,
+        clientSecretError,
+        formData: { clientId, clientSecret, reportSuiteList }
+      });
     });
 });
 
