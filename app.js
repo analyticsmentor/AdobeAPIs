@@ -18,7 +18,8 @@ app.get('/', (req, res) => {
     error: null,
     clientIdError: null,
     clientSecretError: null,
-    formData: { clientId: '', clientSecret: '', reportSuiteList: [''] }
+    formData: { clientId: '', clientSecret: '', reportSuiteList: [''] },
+    workbooks: null
   });
 });
 
@@ -158,7 +159,13 @@ app.post('/submit', (req, res) => {
           console.log(`Workbook saved to: ${filePath}`);
       });
 
-      res.render('result', { workbooks: workbooks.map(wb => `AA Vars 4 ${wb.rsid}.xlsx`) });
+      res.render('form', {
+        error: null,
+        clientIdError: null,
+        clientSecretError: null,
+        formData: { clientId, clientSecret, reportSuiteList },
+        workbooks: workbooks.map(wb => `AA Vars 4 ${wb.rsid}.xlsx`) 
+      });
     })
     .catch(error => {
       console.error('Error:', error.message);
@@ -179,7 +186,8 @@ app.post('/submit', (req, res) => {
         error: errorMessage,
         clientIdError,
         clientSecretError,
-        formData: { clientId, clientSecret, reportSuiteList }
+        formData: { clientId, clientSecret, reportSuiteList },
+        workbooks: null
       });
     });
 });
