@@ -86,7 +86,7 @@
                   </div>
             
                   <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
-                    <div class="sm:col-span-4">
+                    <div class="sm:col-span-5">
                       <label for="clientId" class="block text-sm font-medium leading-6 text-gray-900">Client ID:</label>
                       <div class="mt-2">
                         <input type="text" name="clientId" id="clientId" autocomplete="given-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 <% if (clientIdError) { %> ring-red-500 focus:ring-red-500 <% } else { %> ring-gray-300 focus:ring-indigo-600 <% } %>" value="<%= formData.clientId %>">
@@ -96,7 +96,7 @@
                       </div>
                     </div>
 
-                    <div class="sm:col-span-4">
+                    <div class="sm:col-span-5">
                       <label for="clientSecret" class="block text-sm font-medium leading-6 text-gray-900">Client Secret:</label>
                       <div class="mt-2">
                         <input type="text" name="clientSecret" id="clientSecret" autocomplete="given-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 <% if (clientSecretError) { %> ring-red-500 focus:ring-red-500 <% } else { %> ring-gray-300 focus:ring-indigo-600 <% } %>" value="<%= formData.clientSecret %>">
@@ -106,7 +106,7 @@
                       </div>
                     </div>
             
-                    <div class="sm:col-span-4">
+                    <div class="sm:col-span-5">
                       <label for="reportSuites" class="block text-sm font-medium leading-6 text-gray-900">Report Suite(s):</label>
                       <div class="mt-2 flex rounded-md shadow-sm">
                         <div class="report-suite-group relative flex flex-grow items-stretch focus-within:z-10">
